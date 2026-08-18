@@ -1,0 +1,18 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
+
+jobs:
+  ci:
+    # kart-devops houses the shared CI/CD workflows so the same pipeline
+    # (restore/build/test/lint/scan) isn't copy-pasted across all deployable repos
+    # (PLATFORM_BLUEPRINT.md §2.4, kart-conventions.md "CI").
+    uses: kart-commerce/kart-devops/.github/workflows/dotnet-service-ci.yml@main
+    with:
+      solution-path: KartAiAssistantService.sln
+      dotnet-version: "8.0.x"
+    secrets: inherit
