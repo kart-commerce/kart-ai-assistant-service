@@ -9,7 +9,6 @@ COPY src/Infrastructure/Kart.AiAssistant.Infrastructure.csproj src/Infrastructur
 RUN --mount=type=cache,target=/root/.nuget/packages,id=nuget-packages \
     dotnet restore src/Api/Kart.AiAssistant.Api.csproj
 COPY src/ src/
-COPY contracts/ contracts/
 RUN --mount=type=cache,target=/root/.nuget/packages,id=nuget-packages \
     dotnet publish src/Api/Kart.AiAssistant.Api.csproj -c Release -o /app/publish --no-restore
 
