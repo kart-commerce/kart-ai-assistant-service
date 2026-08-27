@@ -1,0 +1,56 @@
+name: kart-ai-assistant-service
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kart-ai-assistant-postgres
+    environment:
+      POSTGRES_DB: kart_ai_assistant
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "${AI_ASSISTANT_POSTGRES_PORT:-5442}:5432"
+    volumes:
+      - kart-ai-assistant-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d kart_ai_assistant"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: kart-ai-assistant-redis
+    ports:
+      - "${AI_ASSISTANT_REDIS_PORT:-6391}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  ai-assistant-service:
+    build:
+      context: .
+    container_name: kart-ai-assistant-service
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "${AI_ASSISTANT_PORT:-8096}:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__AiAssistantDatabase: "Host=postgres;Port=5432;Database=kart_ai_assistant;Username=postgres;Password=postgres"
+      Redis__ConnectionString: "redis:6379"
+      Identity__BaseUrl: "http://host.docker.internal:8081"
+      Identity__ClientId: "ai-assistant-service"
+      Identity__ClientSecret: "dev-ai-assistant-client-secret"
+      Identity__JwksUri: "http://host.docker.internal:8081/.well-known/jwks.json"
+      Analytics__BaseUrl: "http://host.docker.internal:8097"
+
+volumes:
+  kart-ai-assistant-postgres-data:

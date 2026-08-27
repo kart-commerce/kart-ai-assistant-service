@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Kart.AiAssistant.Application.csproj" />
+    <ProjectReference Include="..\Domain\Kart.AiAssistant.Domain.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kart.Shared.Auditing" Version="0.1.0" />
+    <PackageReference Include="Kart.Shared.Observability" Version="0.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.16" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.10" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.1" />
+    <!-- Unlike most ASP.NET Core auth handlers, JwtBearer ships as its own NuGet package, not
+         baked into the Microsoft.AspNetCore.App shared framework — kart-admin-service's own Api
+         project references it the same way (its own AuthenticationExtensions.cs lives there
+         instead; this service's task deliberately places it in Infrastructure). -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Needed for AddAuthorizationBuilder and IHttpClientFactory/other ASP.NET Core hosting
+         abstractions consumed here — mirrors kart-admin-service's own Infrastructure.csproj, which
+         needs the same shared framework for the identical reason. -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>

@@ -1,3 +1,41 @@
+# .NET build output
+bin/
+obj/
+out/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Test results
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+
+# Publish artifacts
+publish/
+*.publish.json
+
+# Secrets file referenced by GlobalConfig:Path — must never live inside the repo,
+# but ignored here too as a defense-in-depth backstop.
+globalconfig.json
+
+# Per-developer local overrides (currently just GlobalConfig:Path) — machine-specific,
+# never committed. Commit appsettings.Local.json.example instead.
+appsettings.Local.json
+appsettings.*.local.json
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
 # Logs
 logs
 *.log
